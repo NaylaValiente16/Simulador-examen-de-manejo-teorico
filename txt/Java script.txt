@@ -1,0 +1,294 @@
+   let respuestasCorrectas = 0;
+    let indicePreguntaActual = 0;
+    let tiempoRestante = 15 * 60; // 15 minutos en segundos
+    let temporizador;
+
+    // Elementos del DOM
+    const comenzarBtn = document.getElementById("comenzar-btn");
+    const continuarBtn = document.getElementById("continuar-btn");
+    const reiniciarBtn = document.getElementById("reiniciar-btn");
+    const descargarBtn = document.getElementById("descargar-btn");
+    const volverSimuladorBtn = document.getElementById("volver-simulador-btn")
+
+    const inicioDiv = document.getElementById("inicio");
+    const consideracionesDiv = document.getElementById("consideraciones");
+    const preguntasDiv = document.getElementById("preguntas");
+    const resultadosDiv = document.getElementById("resultados");
+    const preguntaContainer = document.getElementById("pregunta-container");
+    const mensajeAprobacion = document.getElementById("mensaje-aprobacion");
+
+    // Iniciar examen
+    comenzarBtn.addEventListener("click", function() {
+        inicioDiv.style.display = "none";
+        consideracionesDiv.style.display = "block";
+    });
+
+    // Continuar a las preguntas
+    continuarBtn.addEventListener("click", function() {
+        consideracionesDiv.style.display = "none";
+        preguntasDiv.style.display = "block";
+        mostrarPregunta();
+        iniciarTemporizador();
+    });
+
+    // Mostrar la pregunta actual
+    function mostrarPregunta() {
+        const preguntaActual = preguntas[indicePreguntaActual];
+        preguntaContainer.innerHTML = `
+            <h3>${preguntaActual.pregunta}</h3>
+            ${preguntaActual.opciones.map((opcion, index) => `
+                <button class="opcion-btn" onclick="verificarRespuesta(${index})">${opcion}</button>
+            `).join('')}
+        `;
+
+        // Actualizar la barra de progreso
+        const porcentajeProgreso = ((indicePreguntaActual + 1) / preguntas.length) * 100;
+        document.getElementById("barra-progreso").value = porcentajeProgreso;
+    }
+
+    // Verificar si la respuesta es correcta
+    window.verificarRespuesta = function(opcionSeleccionada) {
+        const preguntaActual = preguntas[indicePreguntaActual];
+        
+        // Guardar la respuesta seleccionada por el usuario
+        preguntaActual.respuestaUsuario = opcionSeleccionada;
+    
+        if (opcionSeleccionada === preguntaActual.respuestaCorrecta) {
+            respuestasCorrectas++;
+            preguntaContainer.innerHTML += `<p class="correcta">Respuesta correcta</p>`;
+        } else {
+            preguntaContainer.innerHTML += `<p class="incorrecta"> Respuesta incorrecta. La respuesta correcta es: ${preguntaActual.opciones[preguntaActual.respuestaCorrecta]}</p>`;
+        }
+    
+        indicePreguntaActual++;
+
+        if (indicePreguntaActual < preguntas.length) {
+            setTimeout(mostrarPregunta, 1000); // Mostrar la siguiente pregunta después de 1 segundo
+        } else {
+            finalizarExamen();
+        }
+    };
+
+    // Iniciar el temporizador
+    function iniciarTemporizador() {
+        temporizador = setInterval(actualizarTemporizador, 1000); // Actualizar durante cada segundo q pasa
+    }
+
+    // Actualizar el temporizador en la pantalla
+    function actualizarTemporizador() {
+        const minutos = Math.floor(tiempoRestante / 60);
+        const segundos = tiempoRestante % 60;
+        document.getElementById("temporizador").textContent = `${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+        
+        if (tiempoRestante <= 0) {
+            clearInterval(temporizador);
+            finalizarExamen();
+        }
+        tiempoRestante--;
+    }
+
+    // Finalizar el examen
+    function finalizarExamen() {
+        preguntasDiv.style.display = "none";
+        resultadosDiv.style.display = "block";
+        clearInterval(temporizador);
+
+        const porcentaje = (respuestasCorrectas / preguntas.length) * 100;
+        const mensaje = porcentaje >= 75 ? "¡Aprobaste :) !" : "No aprobaste :( Sigue intentándolo";
+        mensajeAprobacion.innerText = `Tu puntuación es del ${porcentaje}%. ${mensaje}`;
+
+        preguntas = mezclarPreguntas([...preguntasOriginales]); //mezcla las preguntas en el proximo intento
+        
+        // Mostrar resumen de preguntas y respuestas
+        let resumen = "Resumen del examen:\n\n";
+        preguntas.forEach((pregunta, index) => {
+            resumen += `Pregunta ${index + 1}: ${pregunta.pregunta}\n`;
+            resumen += `Tu respuesta: ${indicePreguntaActual === index && respuestasCorrectas >= 0 ? pregunta.opciones[respuestasCorrectas] : 'No respondida'}\n`;
+            resumen += `Respuesta correcta: ${pregunta.opciones[pregunta.respuestaCorrecta]}\n\n`;
+        });
+
+        // Mostrar el resumen en el área de resultados
+        mensajeAprobacion.innerText += "\n\n" //+ resumen; al sacar esto no aparece el resumen de preguntas
+        finalizarBtn.style.display = 'block';
+        reiniciarBtn.style.display = 'block';
+        descargarBtn.style.display = 'block';
+        
+        //Boton volver simulador
+        const volverSimuladorBtn = document.getElementById('volver-simulador-btn');
+        volverSimuladorBtn.style.display = 'block';
+        
+        
+        volverSimuladorBtn.addEventListener('click', function() {
+            respuestasCorrectas = 0;
+            indicePreguntaActual = 0;
+            tiempoRestante = 15 * 60;
+            resultadosDiv.style.display = "none";
+            inicioDiv.style.display = "block";
+        });
+    }
+    
+
+    function descargarPDF() {
+        const doc = new jsPDF({
+            orientation: 'portrait',
+            unit: 'mm',
+            format: 'a4'
+        });
+    
+        // Configurar fuente Times New Roman
+        doc.setFont("times", "normal");
+        doc.setFontSize(12);
+    
+        // Configuración de márgenes y espaciado
+        const margenX = 20;  // Margen izquierdo
+        const margenY = 20;  // Margen superior
+        const anchoUtil = 170; // Ancho útil para texto (A4 = 210mm - márgenes)
+        let posY = margenY;
+        const espacioLinea = 7; // Espacio entre líneas
+    
+        // Agregar título
+        doc.setFontSize(16);
+        doc.setFont("times", "bold");
+        const titulo = "Resultados del Simulador de Examen de Manejo";
+        const anchoTitulo = doc.getStringUnitWidth(titulo) * doc.getFontSize() / doc.internal.scaleFactor;
+        const centroX = (210 - anchoTitulo) / 2;
+        doc.text(titulo, centroX, posY);
+        
+        posY += espacioLinea * 2;
+    
+        // Agregar imagen del logo (ajusta la ruta según tu estructura)
+        try {
+            doc.addImage('registro.png', 'PNG', (210 - 40) / 2, posY, 40, 40); // centro, 40x40mm
+            posY += 45; // Espacio después de la imagen
+        } catch (error) {
+            console.log("No se pudo cargar la imagen");
+        }
+    
+        // Agregar puntuación
+        doc.setFontSize(12);
+        doc.setFont("times", "bold");
+        const puntuacion = `Puntuación final: ${respuestasCorrectas} de ${preguntas.length} (${(respuestasCorrectas/preguntas.length*100).toFixed(1)}%)`;
+        doc.text(puntuacion, margenX, posY);
+        posY += espacioLinea * 2;
+    
+        // Función auxiliar para dividir texto largo
+        function dividirTextoLargo(texto, ancho) {
+            const palabras = texto.split(' ');
+            let lineas = [];
+            let lineaActual = palabras[0];
+    
+            for(let i = 1; i < palabras.length; i++) {
+                const palabra = palabras[i];
+                const anchoProvisional = doc.getStringUnitWidth(lineaActual + ' ' + palabra) * doc.getFontSize() / doc.internal.scaleFactor;
+                
+                if(anchoProvisional < ancho) {
+                    lineaActual += ' ' + palabra;
+                } else {
+                    lineas.push(lineaActual);
+                    lineaActual = palabra;
+                }
+            }
+            lineas.push(lineaActual);
+            return lineas;
+        }
+    
+        // Iterar sobre cada pregunta
+        preguntas.forEach((pregunta, index) => {
+            // Verificar si necesitamos nueva página
+            if(posY > 260) {  // 297mm es el alto de A4, dejamos margen
+                doc.addPage();
+                posY = margenY;
+            }
+    
+            // Número y texto de la pregunta
+            doc.setFont("times", "bold");
+            let textoPregunta = `Pregunta ${index + 1}: ${pregunta.pregunta}`;
+            let lineasPregunta = dividirTextoLargo(textoPregunta, anchoUtil);
+            
+            lineasPregunta.forEach(linea => {
+                doc.text(linea, margenX, posY);
+                posY += espacioLinea;
+            });
+    
+            // Respuesta del usuario
+            doc.setFont("times", "normal");
+            let respuestaUsuario = pregunta.respuestaUsuario !== undefined ? 
+                pregunta.opciones[pregunta.respuestaUsuario] : 
+                'No respondida';
+            let textoRespuestaUsuario = `Tu respuesta: ${respuestaUsuario}`;
+            let lineasRespuestaUsuario = dividirTextoLargo(textoRespuestaUsuario, anchoUtil);
+            
+            posY += espacioLinea/2;
+            lineasRespuestaUsuario.forEach(linea => {
+                doc.text(linea, margenX, posY);
+                posY += espacioLinea;
+            });
+    
+            // Indicar si fue correcta o incorrecta
+            let esCorrecta = pregunta.respuestaUsuario === pregunta.respuestaCorrecta;
+          // Para los colores, dividimos entre 255 para obtener valores entre 0 y 1
+            doc.setTextColor(esCorrecta ? 0 : 1, esCorrecta ? 0.39 : 0, 0);
+            doc.text(esCorrecta ? 'Correcta' : 'Incorrecta', margenX, posY);
+            doc.setTextColor(0,0,0); // Volver al color negro
+    
+            // Si es incorrecta, mostrar la respuesta correcta
+            if(!esCorrecta) {
+                posY += espacioLinea;
+                let textoRespuestaCorrecta = `Respuesta correcta: ${pregunta.opciones[pregunta.respuestaCorrecta]}`;
+                let lineasRespuestaCorrecta = dividirTextoLargo(textoRespuestaCorrecta, anchoUtil);
+                
+                lineasRespuestaCorrecta.forEach(linea => {
+                    doc.text(linea, margenX, posY);
+                    posY += espacioLinea;
+                });
+            }
+    
+            posY += espacioLinea * 1.5; // Espacio entre preguntas
+        });
+    
+        // Agregar pie de página
+        const fecha = new Date().toLocaleDateString();
+        doc.setFontSize(10);
+        doc.text(`Fecha del simulador de examen: ${fecha}`, margenX, 285);
+    
+        // Guardar el PDF
+        doc.save('resultados-examen.pdf');
+    }
+      // Boton descargar pdf
+      descargarBtn.addEventListener('click', descargarPDF);
+
+    
+
+    // Reiniciar el simulador
+    reiniciarBtn.addEventListener('click', function() {
+        respuestasCorrectas = 0;
+        indicePreguntaActual = 0;
+        tiempoRestante = 15 * 60; // 15 minutos en segundos
+
+        resultadosDiv.style.display = "none";
+        inicioDiv.style.display = "block";
+    });
+});
+document.getElementById("reiniciar-btn").addEventListener("click", function () {
+    // Oculta la sección de preguntas
+    document.getElementById("preguntas").style.display = "none";
+
+    // Muestra la sección de bienvenida
+    document.getElementById("bienvenido").style.display = "block";
+
+    // Reinicia el temporizador y la barra de progreso (opcional)
+    document.getElementById("temporizador").textContent = "15:00";
+    document.getElementById("barra-progreso").value = 0;
+});
+
+
+//auto
+window.addEventListener('load', () => {
+    const auto = document.querySelector('.auto');
+    auto.classList.remove('auto'); // Elimina la clase para reiniciar
+    void auto.offsetWidth; // Truco para forzar el reflow y reiniciar la animación
+    auto.classList.add('auto'); // Vuelve a agregar la clase
+});
+
+
+

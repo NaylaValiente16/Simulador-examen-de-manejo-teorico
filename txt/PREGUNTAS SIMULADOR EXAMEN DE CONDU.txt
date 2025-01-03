@@ -1,0 +1,130 @@
+PREGUNTAS SIMULADOR EXAMEN DE CONDUCIR
+
+const preguntas = [
+        // Preguntas que van a aparecer en el simulador. empieza desde 0 para verificar cual es la respuesta correcta.
+         // 1
+        {
+            pregunta: "La niebla como factor de riesgo produce modificaciones en: ",
+            opciones: ["El campo visual del conductor y su percepción del entorno, la capacidad lumínica del vehículo como la adherencia de sus cubiertas y la respuesta del pavimento", 
+                "El campo visual del conductor y el estado del pavimento.", 
+                "Solo afecta la capacidad lumínica del vehículo y la respuesta de sus cubiertas en el avance"],
+            respuestaCorrecta: 0
+        },
+        // 2
+        {
+            pregunta: "¿Cuál es la velocidad mínima  permitida en avenidas, salvo señalización en contrario?",
+            opciones: ["20 km/h", "40 km/h", "30 km/h"],
+            respuestaCorrecta: 2
+        },
+    
+        // 3
+       
+        {
+            pregunta: "¿Está permitido penetrar en un paso de nivel cuando las barreras están en movimiento?",
+            opciones: ["Solo si me aseguro que puedo pasar con seguridad", "No", "Sí, cuando estén levantándose"],
+            respuestaCorrecta: 1
+        },
+        // 4
+        {
+            pregunta: "Cuando un vehículo circula por una arteria ubicada al costado de una vía ferréa. ¿Es obligatorio cederle el paso a otro que sale del paso a nivel?",
+            opciones: ["Sí, si viene de la derecha", "No", "Debe cedérse el paso, venga de la izquierda o de la derecha."],
+            respuestaCorrecta: 2
+        },
+        // 5
+        {
+            pregunta: "Según la ley N°24.449, ¿Qué indica un cordón pintado de color amarillo?",
+            opciones: ["Indica que sólo está prohibido estacionar, pudiendo efectuarse detenciones para ascenso y descenso de carga y pasajeros.", 
+                "Indica que es un lugar reservado para el estacionamiento exclusivo de vehículos destinados al transporte de pasajeros.", 
+                "Indica que está prohibido estacionar o detenerse al costado de la acera."],
+            respuestaCorrecta: 0
+        },
+          // 6
+          {
+            pregunta: "¿Cuales son los números de emergencia que todo usuario de la vía pública debe conocer con el objetivo de llamar y pedir ayuda ante un accidente de cualquier indole?",
+            opciones: ["211/109", "911/107", "112/110"],
+            respuestaCorrecta: 1
+        },
+        //7
+        {
+            pregunta: "Al efectuar un giro en una bocacalle estando encendida la luz verde del semáforo, entre el conductor y el peatón ¿Quién tiene prioridad de paso?",
+            opciones: ["El peatón", "El conductor", "Es indistinto"],
+            respuestaCorrecta: 0
+        },
+        //8
+        {
+            pregunta: "¿En que casos utilizamos luz alta?",
+            opciones: ["En casos de niebla y en conducción nocturna", "Cuando se circule en cualquier arteria y la luz natural sea insuficiente", "Solo en zona rural o autopista, cuando la luz natural sea insuficiente. "],
+            respuestaCorrecta: 2
+        },
+        //9
+        {
+            pregunta: "¿Por donde no deben circular los conductores principiantes?",
+            opciones: ["Calles, avenidas y autopistas", "Rutas y avenidas", "Zonas centricas, rutas, autopistas y semiautopistas. "],
+            respuestaCorrecta: 2
+        },
+        //10
+        {
+            pregunta: "¿Que debe realizar el conductor frente a la luz amarilla inermitente del semáforo?",
+            opciones: ["Detenerse", "Avanzar con precaución", "Avanzar"],
+            respuestaCorrecta: 1
+        },
+        //11
+        {
+            pregunta: "¿Por qué período puedo dejar estacionado un vehículo en la vía pública?",
+            opciones: ["Por un período de 30 días o lo que fije la autoridad", "Por un período de 5 días o lo que fije la autoridad", "No hay plazos determinados para dejar un vehículo estacionado"],
+            respuestaCorrecta: 1
+        },
+        //12
+        {
+            pregunta: "¿Cuál es la distancia que debe dejarse entre vehículos para estacionar?",
+            opciones: ["50 cm", "5 cm", "5 mts"],
+            respuestaCorrecta: 0
+        },
+        //13
+        {
+            pregunta: "¿Quién tiene prioridad de paso en una avenida?",
+            opciones: ["El que viene por la derecha", "El que circula por la avenida", "Es indistinto"],
+            respuestaCorrecta: 1
+        },
+        //14
+        {
+            pregunta: "Si para adelantar a otro vehículo debe invadir un carril exclusivo para colectivos y taxis, ¿le está permitido realizar la maniobra?",
+            opciones: ["Sí, mientras no venga ningún taxi o colectivo", "No, porque está prohibido usar ese carril", "Si, puedo usar el carril para adelantar a otro vehículo"],
+            respuestaCorrecta: 1
+        },
+        //15
+        {
+            pregunta: "Usted ha adelantado a otro vehículo en una intersección ¿es correcto su comportamiento?",
+            opciones: ["Si, porque tengo prioridad de paso", "No, porque sólo está permitido adelantar en las intersecciones con rotondas.",  "No, porque en las intersecciones está prohibido adelantar"],
+            respuestaCorrecta: 2
+        },
+        //16
+        {
+            pregunta: "Debe cederle el paso a una fila de escolares que circula por la calle?",
+            opciones: ["Sí", "No",  "Solo si se advierte la existencia de un colegio cercano"],
+            respuestaCorrecta: 0
+        },
+        //17
+        {
+            pregunta: "¿Cuál de estas sustancias pueden afectar negativamente a la hora de conducir?",
+            opciones: ["Cualquier medicamento", "Bebidas azúcaradas",  "Bebidas alcohólicas"],
+            respuestaCorrecta: 2
+        },
+        //18
+        {
+            pregunta: "¿Qué significa la señal de la estrella amarilla?",
+            opciones: ["Lugar donde ocurrió un siniestro vial que produjo una victima fatal", "Lugar donde ocurrió un siniestro",  "Zona de peligro"],
+            respuestaCorrecta: 0
+        },
+        //19
+         {
+        pregunta: "Entre los efectos que produce el alcohol en el conductor se encuentra la: ",
+        opciones: ["Ampliación del campo visual", "Disminución de la distancia de frenado",  "Incorrecta apreciación de distancias y velocidades"],
+        respuestaCorrecta: 2
+         },
+         //20
+         {
+            pregunta: "Usted ha sufrido un desperfecto en su vehículo y lo ha dejado inmovilizado en la banquina, ¿debe señalizarlo?",
+            opciones: ["No, porque el vehículo no está en la calzada", "Sí, con las balizas encendidas, los triángulos de señalización y luces de posición",  "Sí, con los triángulos de señalización de vehículo "],
+            respuestaCorrecta: 1 
+        },

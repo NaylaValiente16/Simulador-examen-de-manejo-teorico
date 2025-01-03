@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Examen de Manejo</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <!--Google Fonts-->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" sizes="16x16" href="icon.png"> <!-- Logo página en el navegador -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> <!-- Librería PDF -->
+</head>
+<body>
+
+    <header>
+        <h1>Simulador de Examen de Manejo</h1>
+    </header>
+
+    <main>
+      
+        <section id="inicio">
+            <h2>¡Bienvenido!</h2>
+            <p>Prepárate para tu examen teórico con este simulador.</p>
+            <p>Podrás practicar cuantas veces quieras</p>
+            <p>y aprobar tu examen teórico de manejo.</p>
+            <div id="auto-container">
+                <img src="auto.png.png" class="auto" alt="Auto">
+            </div>
+            <button id="comenzar-btn" >
+                <img src="volante 2.png" alt="Volante" class="icono-volante" />
+                Comenzar
+            </button>
+        </section>
+
+        <!--seccion del login-->
+
+        <section id="login" class="login-container" style="display: none;">
+            <h1>Inicio de Sesión</h1>
+            <form id="loginForm">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" placeholder="Ingrese su DNI (sin puntos)" required>
+        
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+        
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
+        
+                <button type="submit">Iniciar Sesión</button>
+                <p class="error" id="errorMensaje">Todos los campos son obligatorios.</p>
+            </form>
+             <!--Inicio de sesion exitoso-->
+             <div id="successMessage" style="display: none; color: green;"></div>
+        </section>
+       
+
+        
+        <!-- seccion de consideraciones -->
+        <section id="consideraciones" style="display:none;">
+            <h2>Consideraciones</h2>
+            <ul>
+                <li>El simulador cuenta con 20 preguntas.</li>
+                <li>Tienes un tiempo máximo de 15 minutos para realizarlo.</li>
+                <li>Necesitas al menos el 75% de respuestas correctas para aprobar.</li>
+            </ul>
+            <button id="continuar-btn">Continuar</button>
+        </section>
+
+        <!-- seccion de preguntas -->
+        <section id="preguntas" style="display:none;">
+            <h2>Preguntas</h2>
+            <p><span id="temporizador">15:00</span></p>
+            <p>Progreso:</p>
+            <progress id="barra-progreso" value="0" max="100"></progress>
+            <div id="pregunta-container"></div>
+            <div class="botones-container">
+                <button id="reiniciar-btn">Reiniciar Examen</button>
+            </div>
+        </section>
+        
+        <!--seccion de resultados -->
+        <section id="resultados" style="display:none;">
+            <h2>Resultados</h2>
+            <p id="mensaje-aprobacion"></p>
+            <hr>
+            <div id="mensaje-final">
+                <p>¡Felicidades por completar el simulador!</p>
+                <p>Cada vez que practicas, estás más cerca de convertirte en un conductor preparado y seguro de sí mismo.</p>
+                <p>Practicar es la clave para mejorar.</p>
+                <p>¡Suerte en tu examen real!</p>
+                <p class="proposito"> "Nuestro propósito es ofrecer una experiencia interactiva, 
+                    donde el usuario pueda estar preparado y garantizar el éxito en su examen teórico de conducir."
+                </p>
+            </div>
+            <hr>
+            <div class="botones-container">
+                <button id="volver-simulador-btn">
+                    <img src="volante 2.png" alt="Volante" class="icono-volante" />
+                    Volver a realizar el simulador</button>
+                <button id="descargar-pdf-btn">
+                    <img src="volante 2.png" alt="Volante" class="icono-volante" />
+                    Descargar PDF
+                </button>
+                <button id="estadisticas">
+                    <img src="volante 2.png" alt="Volante" class="icono-volante" />
+                    Ver historial de intentos</button>
+            </div>
+        </section>
+
+<!--seccion mostrar tabla de intentos-->
+        <section id="seccion-intentos" style="display: none;">
+            <h2>Historial de Intentos</h2>
+        <!-- menu para ordenar intentos -->
+        <label for="ordenar">Ordenar por:</label>
+        <select id="ordenar">
+        <option value="fechaDesc">Fecha más reciente</option>
+        <option value="fechaAsc">Fecha más lejana</option>
+        <option value="puntajeDesc">Puntuación más alta</option>
+        <option value="puntajeAsc">Puntuación más baja</option>
+        </select>
+            <table id="tabla-intentos" style="display: block;">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Puntaje</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-cuerpo">
+                <!-- intentos del usuario -->
+                </tbody>
+            </table>
+            <br>
+            
+            <button id="volver-inicio-btn">Volver al inicio</button>
+            <button id="volver-resultados-btn">Volver atrás</button>
+
+        </section>  
+    </main>
+
+    <footer>
+        <p>© Todos los derechos reservados. Página realizada por Nayla Valiente.</p>
+    </footer>
+
+<script src="script.js" defer></script>
+    
+</body>
+</html>

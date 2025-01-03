@@ -1,0 +1,107 @@
+HTML
+
+<!--seccion del login-->
+        <section id="login" class="login-container" style="display: none;">
+            <h1>Inicio de Sesión</h1>
+            <form id="loginForm">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" placeholder="Ingrese su DNI (sin puntos)" required>
+        
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+        
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" placeholder="Ingrese su apellido" required>
+        
+                <button type="submit">Iniciar Sesión</button>
+                <p class="error" id="errorMensaje">Todos los campos son obligatorios.</p>
+            </form>
+        </section>
+
+CSS
+
+/* login */
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: white; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background-color: #F9F9F9; 
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 350px;
+}
+
+.login-container h1 {
+    color: #4A90E2; /* Azul claro */
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.login-container label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #4A90E2; /* Azul claro */
+    text-align: left;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-container input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #D1D5DB; /* Borde gris claro */
+    border-radius: 5px;
+    font-size: 0.9rem;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.login-container input[type="text"]:focus {
+    border-color: #4A90E2; /* Borde azul claro al enfocar */
+    outline: none;
+}
+
+.login-container button {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background: #75aadb;
+    color: white;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-container button:hover {
+    background: #5590c7;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.login-container button:active {
+    transform: scale(0.95);
+}
+
+
+.login-container .error {
+    color: #E53E3E; 
+    font-size: 0.85rem;
+    margin-top: 10px;
+    display: none; 
+}
+
+

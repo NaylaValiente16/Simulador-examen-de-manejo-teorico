@@ -1,0 +1,20 @@
+BASE DE DATOS 
+
+create database simulador_ec;
+use simulador_ec;
+CREATE TABLE usuario (
+    dni varchar(8) PRIMARY KEY,
+    nombre VARCHAR(30),
+    apellido VARCHAR(30)
+);
+CREATE TABLE intento (
+    id_intento INT AUTO_INCREMENT PRIMARY KEY,
+    dni_usuario varchar(8),
+    puntaje INT,
+    fecha DATE,
+    hora TIME,
+    FOREIGN KEY (dni_usuario) REFERENCES usuario(dni)
+	ON DELETE CASCADE -- elimina los intentos si se elimina el usuario.
+	ON UPDATE CASCADE -- actualiza la referencia si cambia el DNI del usuario.
+);
+
